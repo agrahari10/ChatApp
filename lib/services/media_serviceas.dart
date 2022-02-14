@@ -7,7 +7,7 @@ class MediaServices{
   MediaServices(){}
 
   Future<PlatformFile?> pickImageFromLibrary()async{
-    FilePickerResult? _result = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? _result = await FilePicker.platform.pickFiles(type: FileType.image,allowCompression: true);
 
     if (_result != null){
       return _result.files[0];

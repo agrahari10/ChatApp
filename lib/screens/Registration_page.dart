@@ -118,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 });
               },
               hintText: "Name",
-              regEx: r'.{8,}',
+              regEx: r'.{4,}',
             ),
             CustomTextField(
               obscureText: false,
@@ -133,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
               // regEx: r'.{8,}',
             ),
             CustomTextField(
-              obscureText: false,
+              obscureText: true,
               onSaved: (_value) {
                 setState(() {
                   _password = _value;
@@ -156,8 +156,17 @@ class _RegisterPageState extends State<RegisterPage> {
         onPressed: ()async {
           if(_registerFormKey.currentState!.validate() && _profileImage != null){
             _registerFormKey.currentState!.save();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                duration: Duration(seconds:30),
+                                content: Row(
+                                  children: [
+                                    Expanded(child: Text('Registering...')),
+                                    CircularProgressIndicator(),
+                                  ],
+                                ),
+                              ),);
             String? _uid = await _auth.registerUserUsingEmailAndPassword(_email!, _password!);
-
+            CircularProgressIndicator();
             String? _imageUrl = await _cloudStorageServices.saveUserImageToStorage(_uid!, _profileImage!);
             await _db.createUser(_uid, _email!, _name!, _imageUrl!);
             CircularProgressIndicator();
