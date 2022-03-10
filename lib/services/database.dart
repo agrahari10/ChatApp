@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:chat_system/Models/Chat_message.dart';
+import 'package:chat_system/Models/chat_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,17 @@ const String MESSAGE_COLLECTION = "messages";
 class DatabaseServices {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance.currentUser;
-  DatabaseServices() {}
+  late ChatUser thisUser;
+  // DatabaseServices() {
+  //   currentUser(_auth!.uid).then((value) {
+  //     thisUser = value;
+  //   });
+  // }
+
+  // ChatUser get getCurrentUser => thisUser;
+  ChatUser getCurrentUser() {
+    return thisUser;
+  }
 
   Future<void> createUser(
     String _uid,
@@ -36,31 +47,57 @@ class DatabaseServices {
   Future<DocumentSnapshot> getUser(String _uid) {
      print(_auth!.email);
       print("7"*100);
+     // DocumentSnapshot document = _db.collection(USER_COLLECTION).doc(_uid).get();
+     // if {
+
+     // }
     return _db.collection(USER_COLLECTION).doc(_uid).get();
   }
 
-  Future<QuerySnapshot> getUsers({String? name}){
-     print(_auth!.email);
+  // Future<DocumentSnapshot> currentUser(String? _uid) async{
+  //   Query _queryy = _db.collection(USER_COLLECTION).where(_uid!);
+  //   print(_queryy.get());
+  //   print("Abcd"*100);
+  //   var doc =await _queryy.get();
+  //   var data = doc.docs[0].data()!;
+  //   print(data);
+  // Map<String, dynamic> _userData =
+  //                   _queryy.data as Map<String, dynamic>;
+  //                   _userData["uid"] = doc.;
+  //               _members.add(
+  //                 ChatUser.fromJSON(_userData),
+  //               );
 
-     Query _query = _db.collection(USER_COLLECTION);
-    //  print(name != _auth?.displayName);
-     print("*" * 200);
-     if(name != null){
-       _query = _query.where("name" ,isGreaterThanOrEqualTo: name).where("name",isLessThanOrEqualTo: name + "z");
-     }
-     return _query.get();
+  //   // return ChatUser(uid: uid, imageURL: data., email: email, lastActive: lastActive, name: name)
+  // }
+  Future<QuerySnapshot> getUsers({String? name}) {
+    print(_auth!.email);
+    print('900'*100);
+    Query _query = _db.collection(USER_COLLECTION).where("name",isNotEqualTo: _auth!.email);
+     print(_auth!.email);
+    if (name != null) {
+      _query = _query
+          .where("name", isGreaterThanOrEqualTo: name)
+          .where("name", isLessThanOrEqualTo: name + "z");
+    }
+    return _query.get();
   }
 
   Stream<QuerySnapshot> getChatsForUser(String _uid) {
-    return _db
-        .collection(CHAT_COLLECTION)
-        .where('members', arrayContains: _uid,)
-        .snapshots();
     // print('object'*100);
     // print(_db
-    // .collection(CHAT_COLLECTION)
-    // .where('members', arrayContains: _uid)
-    // .snapshots());
+    //     .collection(CHAT_COLLECTION)
+    //     .where('members', arrayContains: _uid)
+    //     .snapshots());
+    return _db
+        .collection(CHAT_COLLECTION)
+        .where(
+          'members',
+          // isNotEqualTo: _auth!.email,
+          arrayContains: _uid,
+        )
+        .snapshots();
+
   }
 
   Future<QuerySnapshot> getLastMessageForChat(String _chatID) {
@@ -121,12 +158,12 @@ class DatabaseServices {
     }
   }
 
-  Future<DocumentReference?> createChat(Map<String ,dynamic> _data)async{
-    try{
-      DocumentReference _chat = await _db.collection(CHAT_COLLECTION).add(_data);
+  Future<DocumentReference?> createChat(Map<String, dynamic> _data) async {
+    try {
+      DocumentReference _chat =
+          await _db.collection(CHAT_COLLECTION).add(_data);
       return _chat;
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }

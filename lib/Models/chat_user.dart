@@ -30,7 +30,7 @@ class ChatUser {
       "Name" : name,
       "lastActive":lastActive,
       "Image" : imageURL,
-      // "uid":uid
+      "uid":uid
   };
 }
 String lastActiveday(){

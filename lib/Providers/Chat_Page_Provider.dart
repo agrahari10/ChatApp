@@ -46,7 +46,7 @@ class ChatPageProvider extends ChangeNotifier {
   }
   @override
   void dispose() {
-    _messagesStream.cancel();
+    // _messagesStream.cancel();
     // TODO: implement dispose
     super.dispose();
   }
@@ -55,7 +55,7 @@ class ChatPageProvider extends ChangeNotifier {
     try {
       _messagesStream = _db.streamMessageForChat(_chatId).listen((_snapshot) {
         List<ChatMessage> _message = _snapshot.docs.map(
-          (_m) {
+          (_m){
             Map<String, dynamic> _messageData =
                 _m.data() as Map<String, dynamic>;
             return ChatMessage.fromJSON(_messageData);
@@ -94,7 +94,7 @@ class ChatPageProvider extends ChangeNotifier {
         senderID: _auth.user.uid,
         sentTime: DateTime.now(),
       );
-      print(_messageToSend);
+      // print(_messageToSend);
       _db.addMessageToChat(_chatId, _messageToSend);
     }
   }

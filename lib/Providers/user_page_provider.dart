@@ -39,13 +39,22 @@ class UsersPageProvider extends ChangeNotifier {
     try {
       _database.getUsers(name: name).then((_snapshot) {
         // var currentUser;
+        // if ()
+        print(_auth.user);
+        print('Hello'*100);
         users = _snapshot.docs.map((_doc) {
           Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
+          print(_data);
+          print("^"*100);
           _data["uid"] = _doc.id;
-          // if (currentUserId == _data["uid"]) currentUser = _data[currentUserId];
+          print(_data);
+          // print(_)
+          // if (_auth != _data["uid"]) currentUser = _data[currentUserId];
           return ChatUser.fromJSON(_data);
         }).toList();
-        // users!.remove(currentUserId);
+        // print(_auth.user);
+        // print('wwww'*100);
+        // users!.remove(_auth.user);
         notifyListeners();
       });
     } catch (e) {
@@ -58,6 +67,9 @@ class UsersPageProvider extends ChangeNotifier {
       _selectedUsers.remove(_user);
     } else {
       _selectedUsers.add(_user);
+      // if (_selectedUsers.contains(_auth.user)){
+      //   _selectedUsers.remove(_user);
+      // }
     }
     notifyListeners();
   }
@@ -76,7 +88,11 @@ class UsersPageProvider extends ChangeNotifier {
       });
       List<ChatUser> _members = [];
       for (var _uid in _membersIds) {
+        // if ( )
         DocumentSnapshot _userSnapShot = await _database.getUser(_uid);
+        print(_userSnapShot);
+        print('ddf'*10);
+        // if(_userSnapShot != _auth.user){
         // ignore: unnecessary_statements
         Map<String, dynamic> _userData =
             _userSnapShot.data() as Map<String, dynamic>;

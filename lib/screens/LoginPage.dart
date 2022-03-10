@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
             // print("Email: $_email,Password: $_password");
             _auth.loginUsingEmailAndPassword(_email!, _password!);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Registering')),
+              SnackBar(content: Text('Signing')),
             );
           }
         });

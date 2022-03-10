@@ -156,17 +156,18 @@ class _RegisterPageState extends State<RegisterPage> {
         onPressed: ()async {
           if(_registerFormKey.currentState!.validate() && _profileImage != null){
             _registerFormKey.currentState!.save();
+            
+            String? _uid = await _auth.registerUserUsingEmailAndPassword(_email!, _password!);
+            CircularProgressIndicator();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                duration: Duration(seconds:30),
+                                duration: Duration(seconds:10),
                                 content: Row(
                                   children: [
-                                    Expanded(child: Text('Registering...')),
-                                    CircularProgressIndicator(),
+                        Expanded(child: Text('Registering...')),
+                        CircularProgressIndicator(),
                                   ],
                                 ),
                               ),);
-            String? _uid = await _auth.registerUserUsingEmailAndPassword(_email!, _password!);
-            CircularProgressIndicator();
             String? _imageUrl = await _cloudStorageServices.saveUserImageToStorage(_uid!, _profileImage!);
             await _db.createUser(_uid, _email!, _name!, _imageUrl!);
             CircularProgressIndicator();

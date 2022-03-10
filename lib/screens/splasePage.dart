@@ -27,14 +27,16 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chatify',
-      theme: ThemeData(
-        backgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
-        scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
-      ),home: Scaffold(
-      body: Text('Chatify',style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
-    ),
+    return Center(
+      child: MaterialApp(
+        title: 'Chatify',
+        theme: ThemeData(
+          backgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
+          scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
+        ),home: Scaffold(
+        body: Text('Chatify',style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+      ),
+      ),
     );
   }
 }

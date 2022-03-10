@@ -48,23 +48,37 @@ class ChatPageProvider extends ChangeNotifier {
           _snapshot.docs.map(
             (_d) async {
               Map<String, dynamic> _chatData =
-                  _d.data() as Map<String, dynamic>;
+              _d.data() as Map<String, dynamic>;
 
               //get user in chat
               List<ChatUser> _members = [];
               for (var _uid in _chatData["members"]) {
-                
+                // print(_chatData["members"]);
+                // print('()'*100);
+                // if (currentUserId != _chatData["members"]) {
+                print("%%%5"* 100);
+
+                // if (_uid != currentUserId){
                 DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
 
                 Map<String, dynamic> _userData =
-                    _userSnapshot.data() as Map<String, dynamic>;
-                    _userData["uid"] = _userSnapshot.id;
+                _userSnapshot.data() as Map<String, dynamic>;
+                _userData["uid"] = _userSnapshot.id;
+                print(_userData['uid']);
+
+                print(_userSnapshot.id);
+                // print('HHHHHH'*100);
+                // print(_userData);
+                // print(ChatUser.fromJSON(_userData));
+                // print('Hello'*1  00);
                 _members.add(
                   ChatUser.fromJSON(_userData),
                 );
                 // print('^%'*500);
                 // print(_userData);
-              }
+                // }
+              // }
+            }
               // get Last Message  for Chat
               List<ChatMessage> _messages = [];
               QuerySnapshot _chatMessage =

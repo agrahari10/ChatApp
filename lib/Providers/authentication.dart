@@ -61,6 +61,7 @@ class AuthenticationProvider extends ChangeNotifier {
       await _auth.signInWithEmailAndPassword(
           email: _email, password: _password);
       print(_auth.currentUser);
+      notifyListeners();
     } on FirebaseAuthException {
       print('Error Logging user into Firebase');
     } catch (e) {
@@ -74,6 +75,7 @@ class AuthenticationProvider extends ChangeNotifier {
       UserCredential _credential = await _auth
           .createUserWithEmailAndPassword(email: _email, password: _password);
       return _credential.user!.uid;
+      notifyListeners();
 
     } on FirebaseAuthException{
       print('Firebse error');

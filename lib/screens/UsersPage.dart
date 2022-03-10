@@ -5,8 +5,10 @@ import 'package:chat_system/WWidgets/Custominput.dart';
 import 'package:chat_system/WWidgets/Rounded.dart';
 import 'package:chat_system/WWidgets/TopBar.dart';
 import 'package:chat_system/WWidgets/custom_listtile.dart';
+import 'package:chat_system/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class UsersPage extends StatefulWidget {
@@ -19,6 +21,8 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   late double _deviceHeight;
   late double _deviceWidth;
+  late DatabaseServices _databaseServices;
+  late User? _authh = FirebaseAuth.instance.currentUser;
 
   late AuthenticationProvider _auth;
   late UsersPageProvider _pageProvider;
@@ -28,10 +32,17 @@ class _UsersPageState extends State<UsersPage> {
       TextEditingController();
 
   @override
+  void initState() {
+    _databaseServices = DatabaseServices();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
+    _databaseServices = GetIt.instance.get<DatabaseServices>();
     // Username = _auth.user as String;
     return MultiProvider(
       providers: [
@@ -97,17 +108,25 @@ class _UsersPageState extends State<UsersPage> {
             itemCount: _users.length,
             itemBuilder: (BuildContext _context, int _index) {
               // return Text("User $_index");
-              return CustomListViewTile(
-                  height: _deviceHeight * 0.10,
-                  imagePath: _users[_index].imageURL,
-                  title: _users[_index].name,
-                  isActive: _users[_index].wasRecentlyActive(),
-                  isSelected:
-                      _pageProvider.selectedUsers.contains(_users[_index]),
-                  onTap: () {
-                    _pageProvider.updateSelectedUsers(_users[_index]);
-                  },
-                  subtitle: "Last Active ${_users[_index].lastActiveday()}");
+              // print(_authh);
+              // print('');
+              print(_users[_index].email);
+              print('SSS'*100);
+              if (_authh?.email != _users[_index].email){
+                return CustomListViewTile(
+                    height: _deviceHeight * 0.10,
+                    imagePath: _users[_index].imageURL,
+                    title: _users[_index].name,
+                    isActive: _users[_index].wasRecentlyActive(),
+                    isSelected:
+                    _pageProvider.selectedUsers.contains(_users[_index]),
+                    onTap: () {
+                      _pageProvider.updateSelectedUsers(_users[_index]);
+                    },
+                    subtitle: "Last Active ${_users[_index].lastActiveday()}");
+              }
+              return SizedBox();
+
             },
           );
         } else {
@@ -130,13 +149,15 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Widget _createChatButton() {
-    final thisIsCurrentUser = FirebaseAuth.instance.currentUser;
-    print(_pageProvider.selectedUsers.contains(thisIsCurrentUser));
-    print("#"*200);
-    return
-    _pageProvider.selectedUsers.contains(_auth.user) ?
-    SizedBox():
-     Visibility(
+    // ChatUser thisCurrentUser = _databaseServices.getCurrentUser();
+    // final thisIsCurrentUser = FirebaseAuth.instance.currentUser;
+    // print(_pageProvider.selectedUsers.contains(thisCurrentUser) );
+    // print("#"*200);
+    // return
+    // DatabaseService.;
+    // _pageProvider.selectedUsers.contains(thisCurrentUser) ?
+    // SizedBox():
+    return Visibility(
       visible: _pageProvider.selectedUsers.isNotEmpty,
       child: RoundedButton(
           width: _deviceWidth * 0.80,
